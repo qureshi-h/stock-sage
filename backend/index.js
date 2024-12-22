@@ -3,10 +3,18 @@ const cors = require('cors');
 const express = require('express');
 const app = express();
 
-// Configure CORS
+const allowedOrigins = ['http://localhost:3000', 'https://trading-edge.netlify.app'];
+
 app.use(
     cors({
-        origin: 'http://localhost:3000',
+        origin: (origin, callback) => {
+            // Allow requests with no origin (like mobile apps or curl requests)
+            if (!origin || allowedOrigins.includes(origin)) {
+                callback(null, true);
+            } else {
+                callback(new Error('Not allowed by CORS'));
+            }
+        },
         methods: ['GET', 'POST', 'PUT', 'DELETE'],
         credentials: true,
     }),
