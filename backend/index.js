@@ -4,11 +4,13 @@ const express = require('express');
 const app = express();
 
 // Configure CORS
-app.use(cors({
-    origin: 'http://localhost:3000', // Allow requests from this origin
-    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed methods
-    credentials: true, // Include credentials (if needed)
-}));
+app.use(
+    cors({
+        origin: 'http://localhost:3000',
+        methods: ['GET', 'POST', 'PUT', 'DELETE'],
+        credentials: true,
+    }),
+);
 
 const stockRoutes = require('./routes/stocks');
 const tradeRoutes = require('./routes/trades');
