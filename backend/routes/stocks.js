@@ -1,15 +1,17 @@
 // routes/stocks.js
 const express = require('express');
 const {
-  fetchTopStocks,
-  fetchStocksBySector,
-  fetchStocksByExchange,
-  fetchSingleStockByDate,
-  fetchStockMultipleDates,
+    fetchAllStocks,
+    fetchTopStocks,
+    fetchStocksBySector,
+    fetchStocksByExchange,
+    fetchSingleStockByDate,
+    fetchStockMultipleDates,
 } = require('../controllers/stocksController');
 
 const router = express.Router();
 
+router.get('/all', fetchAllStocks);
 router.get('/top', fetchTopStocks);
 router.get('/sector', fetchStocksBySector);
 router.get('/exchange', fetchStocksByExchange);
