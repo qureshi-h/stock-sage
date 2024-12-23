@@ -3,8 +3,33 @@ const { createTrade, getAllTrades } = require('../models/tradeQueries');
 // Controller for creating a new trade
 exports.createTrade = async (req, res) => {
     try {
-        const trade = await createTrade(req.body);
-        console.log(req.body);
+        const {
+            stock_id,
+            trader_name,
+            trade_type,
+            price,
+            trade_date,
+            units,
+            rationale,
+            option_type,
+            strike_price,
+            expiration_date,
+            option_contracts,
+        } = req.body;
+
+        const trade = await createTrade({
+            stock_id,
+            trader_name,
+            trade_type,
+            price,
+            trade_date,
+            units,
+            rationale,
+            option_type,
+            strike_price,
+            expiration_date,
+            option_contracts,
+        });
 
         res.status(201).json({ message: 'Trade created successfully', trade });
     } catch (error) {
