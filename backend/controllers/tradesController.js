@@ -1,4 +1,4 @@
-const { createTrade, getAllTrades } = require('../models/tradeQueries');
+const { createTrade, getAllTrades, getTraderHoldingsByType } = require('../models/tradeQueries');
 
 // Controller for creating a new trade
 exports.createTrade = async (req, res) => {
@@ -44,5 +44,34 @@ exports.getTrades = async (req, res) => {
     } catch (error) {
         console.error('Error fetching trades:', error.message);
         res.status(500).json({ message: 'Failed to fetch trades', error: error.message });
+    }
+};
+
+// Controller for fetching trader holdings by type (stock or option)
+exports.getTraderHoldingsByType = async (req, res) => {
+    try {
+        const { traderName } = req.params;
+        const { trade_type } = req.query;
+
+        if (!traderName) {
+            return res.status(400).json({ message: 'Trader name is required' });
+        }
+
+        if (!['stock', 'options'].includes(trade_type)) {
+            return res.status(400).json({ message: "Type must be either 'stock' or 'options'" });
+        }
+
+        const holdings = await getTraderHoldingsByType(traderName, trade_type);
+
+        if (holdings.length === 0) {
+            return res
+                .status(404)
+                .json({ message: `No ${trade_type}s found for the given trader` });
+        }
+
+        res.status(200).json({ trader: traderName, trade_type, holdings });
+    } catch (error) {
+        console.error('Error fetching trader holdings:', error.message);
+        res.status(500).json({ message: 'Failed to fetch trader holdings', error: error.message });
     }
 };

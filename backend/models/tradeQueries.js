@@ -64,7 +64,49 @@ const getAllTrades = async () => {
     return rows; // Return the list of trades
 };
 
+// Get current holdings (stocks or options) for a trader
+const getTraderHoldingsByType = async (traderName, type) => {
+    const query =
+        type === 'stock'
+            ? `
+            SELECT 
+                s.stock_id,
+                s.stock_symbol,
+                s.stock_name,
+                s.sector,
+                s.exchange,
+                COALESCE(SUM(CASE WHEN t.trade_type = 'buy' THEN t.units ELSE 0 END), 0) -
+                COALESCE(SUM(CASE WHEN t.trade_type = 'sell' THEN t.units ELSE 0 END), 0) AS net_units
+            FROM trades t
+            JOIN stocks s ON t.stock_id = s.stock_id
+            WHERE t.trader_name = $1 AND t.option_type IS NULL
+            GROUP BY s.stock_id, s.stock_symbol, s.stock_name, s.sector, s.exchange
+            HAVING COALESCE(SUM(CASE WHEN t.trade_type = 'buy' THEN t.units ELSE 0 END), 0) -
+                   COALESCE(SUM(CASE WHEN t.trade_type = 'sell' THEN t.units ELSE 0 END), 0) > 0;
+        `
+            : `
+            SELECT 
+                s.stock_id,
+                s.stock_symbol,
+                s.stock_name,
+                s.sector,
+                s.exchange,
+                COALESCE(SUM(CASE WHEN t.trade_type = 'buy' THEN t.units ELSE 0 END), 0) -
+                COALESCE(SUM(CASE WHEN t.trade_type = 'sell' THEN t.units ELSE 0 END), 0) AS net_units
+            FROM trades t
+            JOIN stocks s ON t.stock_id = s.stock_id
+            WHERE t.trader_name = $1 AND t.option_type IS NOT NULL
+            GROUP BY s.stock_id, s.stock_symbol, s.stock_name, s.sector, s.exchange
+            HAVING COALESCE(SUM(CASE WHEN t.trade_type = 'buy' THEN t.units ELSE 0 END), 0) -
+                   COALESCE(SUM(CASE WHEN t.trade_type = 'sell' THEN t.units ELSE 0 END), 0) > 0;
+        `;
+
+    const { rows } = await pool.query(query, [traderName]);
+    return rows;
+};
+
 module.exports = {
     createTrade,
     getAllTrades,
+    getTraderHoldingsByType,
 };
