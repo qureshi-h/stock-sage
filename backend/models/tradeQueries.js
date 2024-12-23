@@ -12,14 +12,13 @@ const createTrade = async ({
     option_type,
     strike_price,
     expiration_date,
-    option_contracts,
 }) => {
     const query = `
         INSERT INTO trades 
         (stock_id, trader_name, trade_type, price, trade_date, units, rationale, 
-        option_type, strike_price, expiration_date, option_contracts)
+        option_type, strike_price, expiration_date)
         VALUES 
-        ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+        ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
         RETURNING *;
     `;
     const values = [
@@ -33,7 +32,6 @@ const createTrade = async ({
         option_type,
         strike_price,
         expiration_date,
-        option_contracts,
     ];
 
     const { rows } = await pool.query(query, values);
@@ -55,7 +53,6 @@ const getAllTrades = async () => {
             t.option_type, 
             t.strike_price, 
             t.expiration_date, 
-            t.option_contracts,
             s.stock_symbol,
             s.stock_name,
             s.sector,

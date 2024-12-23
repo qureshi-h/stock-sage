@@ -14,7 +14,6 @@ exports.createTrade = async (req, res) => {
             option_type,
             strike_price,
             expiration_date,
-            option_contracts,
         } = req.body;
 
         const trade = await createTrade({
@@ -28,7 +27,6 @@ exports.createTrade = async (req, res) => {
             option_type,
             strike_price,
             expiration_date,
-            option_contracts,
         });
 
         res.status(201).json({ message: 'Trade created successfully', trade });
