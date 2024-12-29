@@ -44,10 +44,10 @@ exports.getTrades = async (req, res) => {
         // Set Cache-Control header to refresh every 5 minutes
         res.setHeader('Cache-Control', 'public, max-age=300, stale-while-revalidate=60');
 
-        res.status(200).json(trades);
+        return res.status(200).json(trades);
     } catch (error) {
         console.error('Error fetching trades:', error.message);
-        res.status(500).json({ message: 'Failed to fetch trades', error: error.message });
+        return res.status(500).json({ message: 'Failed to fetch trades', error: error.message });
     }
 };
 

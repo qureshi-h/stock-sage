@@ -2,6 +2,16 @@
 
 const pool = require('../config/db');
 
+const getStock = async (stock) => {
+    const query = `
+      SELECT stock_id, stock_name, stock_symbol, sector, exchange
+      FROM stocks
+      WHERE stock_symbol = $1;
+    `;
+    const { rows } = await pool.query(query, [stock]);
+    return rows.length === 1 ? rows[0] : null;
+};
+
 const getAllStocks = async () => {
     const query = `
     SELECT stock_id, stock_name, stock_symbol, sector, exchange
@@ -69,6 +79,7 @@ const getStockMultipleDates = async (symbol, startDate, endDate) => {
 };
 
 module.exports = {
+    getStock,
     getAllStocks,
     getTopStocks,
     getStocksBySector,

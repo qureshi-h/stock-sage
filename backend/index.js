@@ -20,16 +20,20 @@ app.use(
     }),
 );
 
-const stockRoutes = require('./routes/stocks');
+const stockRoutes = require('./routes/stock');
+const stocksRoutes = require('./routes/stocks');
 const tradeRoutes = require('./routes/trades');
+const stockAnalysisRoutes = require('./routes/stockAnalysis');
 
 require('dotenv').config();
 
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
-app.use('/api/stocks', stockRoutes);
+app.use('/api/stock', stockRoutes);
+app.use('/api/stocks', stocksRoutes);
 app.use('/api/trades', tradeRoutes);
+app.use('/api/analysis', stockAnalysisRoutes);
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
