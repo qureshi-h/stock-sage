@@ -75,7 +75,7 @@ class StockAnalysisDatabase:
                 float(round(analysis["bollinger_upper"], 3)),
                 float(round(analysis["bollinger_middle"], 3)),
                 float(round(analysis["bollinger_lower"], 3)),
-                int(analysis["volume"], 3),
+                int(analysis["volume"]),
                 float(round(analysis["volume_ratio"], 3)),
                 float(round(analysis["9EMA"], 3)),
                 float(round(analysis["12EMA"], 3)),
@@ -114,7 +114,7 @@ class StockAnalysisDatabase:
                 successful += 1
             except Exception as e:
                 print(f"Error analyzing {stock['stock_symbol']}: {e}")
-
+            break
         total = len(stocks)
         print(
             f"{successful} out of {total} successfully analysed ({successful / total * 100:.2f}%)"
@@ -460,5 +460,5 @@ class StockAnalysisDatabase:
 
 if __name__ == "__main__":
     db = StockAnalysisDatabase()
-    db.analyse_and_store_stocks(period=3)
+    db.analyse_and_store_stocks("2024-12-26", period=3)
     db.close_connection()
