@@ -30,7 +30,7 @@ exports.fetchTopStocks = async (req, res) => {
     const { limit, offset } = paginate(req.query.page, req.query.size);
     try {
         const data = await getTopStocks(date, limit + 1, offset);
-        res.status(200).json({ rows: data.slice(0, limit), final: data.length < limit + 1 });
+        res.status(200).json({ rows: data.slice(0, limit), finalPage: data.length < limit + 1 });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
