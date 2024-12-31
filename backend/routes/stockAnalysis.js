@@ -1,7 +1,9 @@
 const express = require('express');
-const { getStockAnalysis } = require('../controllers/stockAnalysisController');
 const router = express.Router();
 
-router.get('/:stockSymbol/', getStockAnalysis);
+const { fetchTopStocks, getStockAnalysis } = require('../controllers/stockAnalysisController');
+
+router.get('/top', fetchTopStocks);
+router.get('/:stockSymbol', getStockAnalysis);
 
 module.exports = router;

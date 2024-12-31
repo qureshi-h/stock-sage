@@ -2,13 +2,11 @@
 const {
     getStock,
     getAllStocks,
-    getTopStocks,
     getStocksBySector,
     getStocksByExchange,
     getSingleStockByDate,
     getStockMultipleDates,
 } = require('../models/stockQueries');
-const { paginate } = require('../utils/pagination');
 
 exports.fetchStock = async (req, res) => {
     try {
@@ -34,16 +32,7 @@ exports.fetchAllStocks = async (_, res) => {
     }
 };
 
-exports.fetchTopStocks = async (req, res) => {
-    const { date } = req.query;
-    const { limit, offset } = paginate(req.query.page, req.query.size);
-    try {
-        const data = await getTopStocks(date, limit, offset);
-        res.status(200).json(data);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-};
+
 
 exports.fetchStocksBySector = async (req, res) => {
     const { date, sector } = req.query;

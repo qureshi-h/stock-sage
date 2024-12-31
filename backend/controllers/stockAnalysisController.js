@@ -1,4 +1,5 @@
-const { getStockAnalysisBySymbolAndDate } = require('../models/stockAnalysisQueries');
+const { getStockAnalysisBySymbolAndDate, getTopStocks } = require('../models/stockAnalysisQueries');
+const { paginate } = require('../utils/pagination');
 
 exports.getStockAnalysis = async (req, res) => {
     try {
@@ -21,5 +22,16 @@ exports.getStockAnalysis = async (req, res) => {
     } catch (error) {
         console.error('Error fetching stock analysis:', error.message);
         res.status(500).json({ message: 'Failed to fetch stock analysis', error: error.message });
+    }
+};
+
+exports.fetchTopStocks = async (req, res) => {
+    const { date } = req.query;
+    const { limit, offset } = paginate(req.query.page, req.query.size);
+    try {
+        const data = await getTopStocks(date, limit, offset);
+        res.status(200).json(data);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
     }
 };

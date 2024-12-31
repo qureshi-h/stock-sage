@@ -2,7 +2,6 @@
 const express = require('express');
 const {
     fetchAllStocks,
-    fetchTopStocks,
     fetchStocksBySector,
     fetchStocksByExchange,
     fetchSingleStockByDate,
@@ -12,7 +11,6 @@ const {
 const router = express.Router();
 
 router.get('/all', fetchAllStocks);
-router.get('/top', fetchTopStocks);
 router.get('/sector', fetchStocksBySector);
 router.get('/exchange', fetchStocksByExchange);
 router.get('/single-date', fetchSingleStockByDate);

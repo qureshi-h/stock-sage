@@ -21,19 +21,6 @@ const getAllStocks = async () => {
     return rows;
 };
 
-const getTopStocks = async (date, limit, offset) => {
-    const query = `
-    SELECT s.stock_symbol, s.stock_name, sa.*
-    FROM stock_analysis sa
-    JOIN stocks s ON sa.stock_id = s.stock_id
-    WHERE sa.analysis_date = $1
-    ORDER BY sa.breakout_percentage DESC
-    LIMIT $2 OFFSET $3;
-  `;
-    const { rows } = await pool.query(query, [date, limit, offset]);
-    return rows;
-};
-
 const getStocksBySector = async (date, sector) => {
     const query = `
     SELECT s.stock_symbol, s.stock_name, sa.*
@@ -81,7 +68,6 @@ const getStockMultipleDates = async (symbol, startDate, endDate) => {
 module.exports = {
     getStock,
     getAllStocks,
-    getTopStocks,
     getStocksBySector,
     getStocksByExchange,
     getSingleStockByDate,

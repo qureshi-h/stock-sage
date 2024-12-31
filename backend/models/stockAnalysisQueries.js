@@ -36,6 +36,21 @@ const getStockAnalysisBySymbolAndDate = async (stockSymbol, analysisDate) => {
     return rows;
 };
 
+const getTopStocks = async (date, limit, offset) => {
+    const query = `
+    SELECT s.stock_symbol, s.stock_name, sa.*
+    FROM stock_analysis sa
+    JOIN stocks s ON sa.stock_id = s.stock_id
+    WHERE sa.analysis_date = $1
+    AND sa.breakout_percentage IS NOT NULL
+    ORDER BY sa.breakout_percentage DESC
+    LIMIT $2 OFFSET $3;
+  `;
+    const { rows } = await pool.query(query, [date, limit, offset]);
+    return rows;
+};
+
 module.exports = {
     getStockAnalysisBySymbolAndDate,
+    getTopStocks,
 };
