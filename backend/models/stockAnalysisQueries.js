@@ -43,6 +43,7 @@ const getTopStocks = async (date, limit, offset) => {
     JOIN stocks s ON sa.stock_id = s.stock_id
     WHERE sa.analysis_date = $1
     AND sa.breakout_percentage IS NOT NULL
+    AND sa.breakout_percentage > 0
     ORDER BY sa.breakout_percentage DESC
     LIMIT $2 OFFSET $3;
   `;
